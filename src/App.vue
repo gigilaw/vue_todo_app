@@ -1,28 +1,38 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <ToDoList :todos="todos" @add:todo="addTodo" @delete:todo="deleteTodo" @update:todo="updateTodo"></ToDoList>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ToDoList from "./components/ToDoList";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
+  components: { ToDoList },
+  data() {
+    return {
+      todos: [
+        { id: 1, content: "Buy steak", done: false },
+        { id: 2, content: "Cook dinner", done: false },
+        { id: 3, content: "Play some ultimate frisbee", done: false }
+      ]
+    };
+  },
+  methods: {
+    addTodo(todo) {
+      const id = Math.round(Math.random() * 100 + 1);
+
+      const newTodo = { ...todo, id };
+      this.todos = [...this.todos, newTodo];
+    },
+    deleteTodo(id) {
+      this.todos = this.todos.filter(todo => todo.id !== id);
+    },
+    updateTodo(updatedTodo) {
+      this.todos = this.todos.map(todo =>
+        todo.id === updatedTodo.id ? updatedTodo : todo
+      );
+    }
   }
-}
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>
